@@ -1,0 +1,7 @@
+target/
+.mvn/
+.git
+.gitignore
+maven/
+**/node_modules
+**/.idea
