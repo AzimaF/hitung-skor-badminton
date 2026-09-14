@@ -148,14 +148,11 @@
             </div>
             <div class="controls">
                 <button type="submit" class="primary">Simpan Nama Tim & Warna</button>
-                <form th:action="@{/reset}" method="post" style="margin:0">
-                    <button type="submit" class="danger">Reset Skor</button>
-                </form>
             </div>
         </form>
 
-        <div class="actions" style="margin: 18px 0 10px;">
-            <form th:action="@{/reset}" method="post">
+        <div class="actions" style="margin: 18px 0 10px; text-align:center;">
+            <form th:action="@{/reset}" method="post" style="display:inline-block;">
                 <button type="submit" class="danger">Reset Skor</button>
             </form>
         </div>
