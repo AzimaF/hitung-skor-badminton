@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skor Badminton</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: linear-gradient(135deg, #eaf5ff, #ffffff);
+            color: #1d3557;
+        }
+        .container {
+            max-width: 980px;
+            margin: 28px auto;
+            padding: 20px;
+        }
+        .panel {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            padding: 22px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 28px;
+        }
+        .team-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+            align-items: end;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid #bfd7ea;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+        }
+        input[type="color"] {
+            width: 48px;
+            height: 38px;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #cfe7fb;
+            background: white;
+        }
+        .color-row { display:flex; align-items:center; gap:8px; margin-top:4px; }
+        .controls { display:flex; gap:12px; align-items:center; justify-content:center; margin-top:8px; }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.15s ease;
+        }
+        .primary { background: #1d4ed8; color: white; }
+        .primary:hover { transform: translateY(-2px); }
+        .danger { background: #ef4444; color: white; }
+        .danger:hover { transform: translateY(-2px); }
+        .success { background: #16a34a; color: white; }
+        .success:hover { transform: translateY(-2px); }
+
+        .scoreboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+        .team-card {
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid rgba(219,234,254,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 170px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .team-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(13, 38, 59, 0.06); }
+        .team-card h2 { margin: 0 0 8px; font-size: 20px; }
+        .score {
+            font-size: clamp(40px, 8vw, 72px);
+            font-weight: 700;
+            line-height: 1;
+            margin: 4px 0 12px;
+            color: #123049;
+        }
+        .actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+        .status { margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: #e0f2fe; border: 1px solid #bae6fd; text-align: center; font-weight: 600; }
+        .winner { background: #dcfce7; border-color: #86efac; }
+
+        /* Orientation-aware adjustments */
+        @media (orientation: portrait) and (max-width: 900px) {
+            .container { padding: 12px; margin: 12px auto; }
+            .panel { padding: 16px; }
+            .team-card { min-height: 150px; }
+            .controls { flex-direction: column; gap:10px; }
+        }
+
+        /* very small screens */
+        @media (max-width: 420px) {
+            .score { font-size: clamp(32px, 15vw, 56px); }
+            input[type="text"] { font-size: 14px; }
+            .team-form { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="panel">
+        <h1>Skor Badminton</h1>
+
+        <form th:action="@{/set-names}" method="post">
+            <div class="team-form">
+                <div class="input-group">
+                    <label for="teamAName">Nama Tim A</label>
+                    <input id="teamAName" name="teamAName" type="text" th:value="${matchScore.teamAName}" placeholder="Masukkan nama tim A">
+                    <div class="color-row">
+                        <label for="teamAColor">Warna Kotak:</label>
+                        <input id="teamAColor" name="teamAColor" type="color" th:value="${matchScore.teamAColor}" />
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="teamBName">Nama Tim B</label>
+                    <input id="teamBName" name="teamBName" type="text" th:value="${matchScore.teamBName}" placeholder="Masukkan nama tim B">
+                    <div class="color-row">
+                        <label for="teamBColor">Warna Kotak:</label>
+                        <input id="teamBColor" name="teamBColor" type="color" th:value="${matchScore.teamBColor}" />
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button type="submit" class="primary">Simpan Nama Tim & Warna</button>
+                <form th:action="@{/reset}" method="post" style="margin:0">
+                    <button type="submit" class="danger">Reset Skor</button>
+                </form>
+            </div>
+        </form>
+
+        <div class="actions" style="margin: 18px 0 10px;">
+            <form th:action="@{/reset}" method="post">
+                <button type="submit" class="danger">Reset Skor</button>
+            </form>
+        </div>
+
+        <div class="scoreboard">
+            <div id="teamCardA" class="team-card" th:style="${'background:' + matchScore.teamAColor + '; border-color: rgba(0,0,0,0.04)'}">
+                <h2 th:text="${matchScore.teamAName}">Tim A</h2>
+                <div class="score" th:text="${matchScore.teamAScore}">0</div>
+                <div class="actions">
+                    <form th:action="@{/score/add/A}" method="post">
+                        <button type="submit" class="success">+1</button>
+                    </form>
+                    <form th:action="@{/score/subtract/A}" method="post">
+                        <button type="submit" class="danger">-1</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="teamCardB" class="team-card" th:style="${'background:' + matchScore.teamBColor + '; border-color: rgba(0,0,0,0.04)'}">
+                <h2 th:text="${matchScore.teamBName}">Tim B</h2>
+                <div class="score" th:text="${matchScore.teamBScore}">0</div>
+                <div class="actions">
+                    <form th:action="@{/score/add/B}" method="post">
+                        <button type="submit" class="success">+1</button>
+                    </form>
+                    <form th:action="@{/score/subtract/B}" method="post">
+                        <button type="submit" class="danger">-1</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="status" th:classappend="${matchScore.winner != null} ? 'winner' : ''">
+            <span th:text="${matchScore.statusMessage}">Permainan dimulai. Siap wasit!</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Live preview for color pickers (no dependency, works in-browser)
+    (function () {
+        function q(sel) { return document.querySelector(sel); }
+        function applyColor(inputSelector, cardSelector) {
+            var input = q(inputSelector);
+            var card = q(cardSelector);
+            if (!input || !card) return;
+            // apply initial value
+            try { card.style.background = input.value; } catch(e) {}
+            input.addEventListener('input', function () {
+                card.style.background = input.value;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            applyColor('#teamAColor', '#teamCardA');
+            applyColor('#teamBColor', '#teamCardB');
+
+            // also update preview after a successful POST redirect (page loads with selected values)
+            var teamAColor = q('#teamAColor');
+            var teamBColor = q('#teamBColor');
+            if (teamAColor && teamAColor.value) q('#teamCardA').style.background = teamAColor.value;
+            if (teamBColor && teamBColor.value) q('#teamCardB').style.background = teamBColor.value;
+        });
+    })();
+</script>
+
+</body>
+</html>
