@@ -1,0 +1,29 @@
+name: Build and Deploy to Fly
+
+on:
+  push:
+    branches: [ add-color-preview, main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Maven (optional, speeds up Docker stage)
+        run: mvn -B -DskipTests package
+
+      - name: Deploy to Fly
+        uses: superfly/flyctl-action@v1
+        with:
+          args: "deploy --app ${{ secrets.FLY_APP_NAME }} --dockerfile Dockerfile --now"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
