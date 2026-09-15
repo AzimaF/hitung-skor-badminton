@@ -1,0 +1,6 @@
+entrypoint = "src/main/java/com/badminton/score/BadmintonScoreApplication.java"
+run = "mvn -B -DskipTests package && java -Dserver.port=$PORT -jar target/*.jar"
+
+[deployment]
+run = ["sh", "-c", "mvn -B -DskipTests package && java -Dserver.port=$PORT -jar target/*.jar"]
+deploymentTarget = "cloudrun"
