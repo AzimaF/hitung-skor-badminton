@@ -9,7 +9,6 @@ Aplikasi web sederhana untuk membantu wasit mencatat skor pertandingan badminton
 
 ![Preview aplikasi Skor Badminton](https://image.thum.io/get/width/1280/crop/900/https://hitung-skor-badminton--azimaf.replit.app/)
 
-> Jika gambar preview belum muncul saat pertama kali membuka README, tunggu beberapa saat lalu refresh halaman GitHub. Preview dibuat dari URL aplikasi publik di Replit.
 
 ## Fitur
 
@@ -54,7 +53,7 @@ mvn spring-boot:run
 Jika Maven lokal belum tersedia, gunakan Maven yang tersedia di repository:
 
 ```powershell
-cd F:\Kerjaan\hitung-skor-badminton
+cd C:\Download\hitung-skor-badminton
 .\maven\apache-maven-3.9.9\bin\mvn.cmd spring-boot:run
 ```
 
