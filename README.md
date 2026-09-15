@@ -46,7 +46,7 @@ Aplikasi web sederhana untuk membantu wasit mencatat skor pertandingan badminton
 Pastikan Java JDK dan Maven tersedia, lalu jalankan:
 
 ```powershell
-cd F:\Kerjaan\hitung-skor-badminton
+cd C:\Download\hitung-skor-badminton
 mvn spring-boot:run
 ```
 
